@@ -94,6 +94,90 @@ rutas.config(function($routeProvider) {
             templateUrl : 'view/update_promos.html',
             controller  : 'update_promosController'
         })
+        .when('/television', {
+            templateUrl : 'view/television.html',
+            controller  : 'televisionController'
+        })
+        .when('/television/add', {
+            templateUrl : 'view/add_television.html',
+            controller  : 'televisionController'
+        })
+        .when('/television/update/:param', {
+            templateUrl : 'view/update_television.html',
+            controller  : 'update_televisionController'
+        })
+        .when('/internet', {
+            templateUrl : 'view/internet.html',
+            controller  : 'internetController'
+        })
+        .when('/internet/add', {
+            templateUrl : 'view/add_internet.html',
+            controller  : 'internetController'
+        })
+        .when('/internet/update/:param', {
+            templateUrl : 'view/update_internet.html',
+            controller  : 'update_internetController'
+        })
+        .when('/telefonia', {
+            templateUrl : 'view/telefonia.html',
+            controller  : 'telefoniaController'
+        })
+        .when('/telefonia/add', {
+            templateUrl : 'view/add_telefonia.html',
+            controller  : 'telefoniaController'
+        })
+        .when('/telefonia/update/:param', {
+            templateUrl : 'view/update_telefonia.html',
+            controller  : 'update_telefoniaController'
+        })
+        .when('/paquetes', {
+            templateUrl : 'view/paquetes.html',
+            controller  : 'paquetesController'
+        })
+        .when('/paquetes/add', {
+            templateUrl : 'view/add_paquetes.html',
+            controller  : 'paquetesController'
+        })
+        .when('/paquetes/update/:param', {
+            templateUrl : 'view/update_paquetes.html',
+            controller  : 'update_paquetesController'
+        })
+        .when('/tv_en_vivo', {
+            templateUrl : 'view/tv_en_vivo.html',
+            controller  : 'tv_en_vivoController'
+        })
+        .when('/tv_en_vivo/add', {
+            templateUrl : 'view/add_tv_en_vivo.html',
+            controller  : 'tv_en_vivoController'
+        })
+        .when('/tv_en_vivo/update/:param', {
+            templateUrl : 'view/update_tv_en_vivo.html',
+            controller  : 'update_tv_en_vivoController'
+        })
+        .when('/programas_tv', {
+            templateUrl : 'view/programas_tv.html',
+            controller  : 'programas_tvController'
+        })
+        .when('/programas_tv/add', {
+            templateUrl : 'view/add_programas_tv.html',
+            controller  : 'programas_tvController'
+        })
+        .when('/programas_tv/update/:param', {
+            templateUrl : 'view/update_programas_tv.html',
+            controller  : 'update_programas_tvController'
+        })
+        .when('/networks', {
+            templateUrl : 'view/networks.html',
+            controller  : 'networksController'
+        })
+        .when('/networks/add', {
+            templateUrl : 'view/add_networks.html',
+            controller  : 'networksController'
+        })
+        .when('/networks/update/:param', {
+            templateUrl : 'view/update_networks.html',
+            controller  : 'update_networksController'
+        })
         /*final*/  
         .otherwise({
             redirectTo: '/'
@@ -504,7 +588,7 @@ rutas.controller('promosController', ['$scope', 'imagen', '$http', function ($sc
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/insertarimagenpromos/"+ruta
+            url: "http://localhost/api_megacable/eliminarimagenpromos/"+ruta
                 }).success(function(data){
                     //console.log(data);
                     $scope.datos=data;
@@ -549,6 +633,662 @@ rutas.controller('promosController', ['$scope', 'imagen', '$http', function ($sc
                 })
             }    
         }
+}]);
+rutas.controller('televisionController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+        method:"get",
+        url: "http://localhost/api_megacable/cable"})
+        .success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_television=function(id,ruta)
+        {
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarcable/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+        $scope.agregar_tv = function()
+        {
+            if ($scope.miFormulario.$valid) 
+            {
+                $("#guardando").show();
+                var nombre = $scope.nombre;
+                var numero_canales=$scope.numero_canales;
+                var numero_musica=$scope.numero_musica;
+               
+
+                $http({
+                    method:"post",
+                    url: "http://localhost/api_megacable/agregartelevision",
+                    data: ({ 'nombre' : nombre , 'numero_canales' :  numero_canales, 'numero_musica' : numero_musica })
+                }).success(function(data){
+                    alert("Datos Guardados con exito");
+                    window.location.href="#/television";
+                }).error(function(data){
+                    alert("Ha ocurrido un error al guardar los datos");
+                    console.log(data);
+                })
+            }    
+        }
+}]);
+rutas.controller('internetController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+        method:"get",
+        url: "http://localhost/api_megacable/internet"})
+        .success(function(data)
+        {   
+            $scope.datos = [];
+            $scope.datos = data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_internet=function(id,ruta)
+        {
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarinternet/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+        $scope.agregar_internet = function()
+        {
+            if ($scope.miFormulario.$valid) 
+            {
+                $("#guardando").show();
+                var velocidades = $scope.velocidades;
+                var descripcion=$scope.descripcion;
+
+                var file = $scope.file;
+                var directorio=$scope.file.name;
+
+                imagen.agregar_internet(file, velocidades, descripcion).then(function(res)
+                {
+                    //console.log(res);
+                });
+
+               $http({
+                    method:"post",
+                    url: "http://localhost/api_megacable/agregarinternet",
+                    data: ({ 'velocidades' : velocidades , 'descripcion' :  descripcion, 'ruta' : directorio })
+                }).success(function(data){
+                    alert("Datos Guardados con exito");
+                    window.location.href="#/internet";
+                }).error(function(data){
+                    alert("Ha ocurrido un error al guardar los datos");
+                    console.log(data);
+                })
+            }    
+        }
+}]);
+rutas.controller('paquetesController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+        method:"get",
+        url: "http://localhost/api_megacable/paquete_tres"})
+        .success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_internet=function(id,ruta)
+        {
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarinternet/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+}]);
+rutas.controller('telefoniaController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+        method:"get",
+        url: "http://localhost/api_megacable/telefonia"})
+        .success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_telefonia=function(id)
+        {
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminartelefonia/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+        $scope.agregar_telefonia = function()
+        {
+            if ($scope.miFormulario.$valid) 
+            {
+                $("#guardando").show();
+                var nombre = $scope.nombre;
+                var descripcion=$scope.descripcion;
+
+               $http({
+                    method:"post",
+                    url: "http://localhost/api_megacable/agregartelefonia",
+                    data: ({ 'nombre' : nombre , 'descripcion' :  descripcion })
+                }).success(function(data){
+                    alert("Datos Guardados con exito");
+                    window.location.href="#/telefonia";
+                }).error(function(data){
+                    alert("Ha ocurrido un error al guardar los datos");
+                    console.log(data);
+                })
+            }    
+        }
+}]);
+rutas.controller('tv_en_vivoController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+        method:"get",
+        url: "http://localhost/api_megacable/tv_en_vivo"})
+        .success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_tv_en_vivo=function(id,ruta)
+        {
+
+            $http({
+                method:"delete",
+                url: "http://localhost/api_megacable/eliminarimagentv_en_vivo/"+ruta
+            }).success(function(data){
+                //console.log(data);
+                $scope.datos=data;
+            }).error(function(data){
+                //alert("Ha ocurrido un error al eliminar imagen ");
+            });
+
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminartv_en_vivo/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+        $scope.agregar_tv_en_vivo = function()
+        {
+            if ($scope.miFormulario.$valid) 
+            {
+                $("#guardando").show();
+                var nombre = $scope.nombre;
+                var descripcion=$scope.descripcion;
+                var file = $scope.file;
+                var directorio=$scope.file.name;
+
+                imagen.agregar_tv_en_vivo(file, nombre, descripcion).then(function(res)
+                {
+                    //console.log(res);
+                });
+                $http({
+                    method:"post",
+                    url: "http://localhost/api_megacable/agregar_tv_en_vivo",
+                    data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion})
+                }).success(function(data){
+                    alert("Datos Guardados con exito");
+                    window.location.href="#/tv_en_vivo";
+                }).error(function(data){
+                    alert("Ha ocurrido un error al guardar los datos");
+                    console.log(data);
+                })
+            }    
+        }
+}]);
+rutas.controller('networksController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+        method:"get",
+        url: "http://localhost/api_megacable/networks"})
+        .success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_networks=function(id,ruta)
+        {
+
+            $http({
+                method:"delete",
+                url: "http://localhost/api_megacable/eliminarimagennetworks/"+ruta
+            }).success(function(data){
+                //console.log(data);
+                $scope.datos=data;
+            }).error(function(data){
+                //alert("Ha ocurrido un error al eliminar imagen ");
+            });
+
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarnetworks/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+        $scope.agregar_networks = function()
+        {
+            if ($scope.miFormulario.$valid) 
+            {
+                $("#guardando").show();
+                var nombre = $scope.nombre;
+                var descripcion=$scope.descripcion;
+                var file = $scope.file;
+                var directorio=$scope.file.name;
+
+                imagen.agregar_networks(file, nombre, descripcion).then(function(res)
+                {
+                    //console.log(res);
+                });
+                $http({
+                    method:"post",
+                    url: "http://localhost/api_megacable/agregarnetwork",
+                    data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion})
+                }).success(function(data){
+                    alert("Datos Guardados con exito");
+                    window.location.href="#/networks";
+                }).error(function(data){
+                    alert("Ha ocurrido un error al guardar los datos");
+                    console.log(data);
+                })
+            }    
+        }
+}]);
+rutas.controller('programas_tvController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+        method:"get",
+        url: "http://localhost/api_megacable/programas_tv"
+        }).success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        $scope.eliminar_programas_tv=function(id,ruta)
+        {
+
+            $http({
+                method:"delete",
+                url: "http://localhost/api_megacable/eliminarimagenprogramas_tv/"+ruta
+            }).success(function(data){
+                //console.log(data);
+                $scope.datos=data;
+            }).error(function(data){
+                //alert("Ha ocurrido un error al eliminar imagen ");
+            });
+
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarprogramas_tv/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+        $scope.agregar_programas_tv = function()
+        {
+            if ($scope.miFormulario.$valid) 
+            {
+                $("#guardando").show();
+                var nombre = $scope.nombre;
+                var descripcion=$scope.descripcion;
+                var file = $scope.file;
+                var directorio=$scope.file.name;
+
+                imagen.agregar_programas_tv(file, nombre, descripcion).then(function(res)
+                {
+                    //console.log(res);
+                });
+                $http({
+                    method:"post",
+                    url: "http://localhost/api_megacable/agregarprogramas_tv",
+                    data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion})
+                }).success(function(data){
+                    alert("Datos Guardados con exito");
+                    window.location.href="#/programas_tv";
+                }).error(function(data){
+                    alert("Ha ocurrido un error al guardar los datos");
+                    console.log(data);
+                })
+            }    
+        }
+}]);
+rutas.controller('update_tv_en_vivoController',['$scope', 'imagen', '$http', '$routeParams', function($scope, imagen, $http,$routeParams) 
+{
+    //console.log($routeParams.param);
+    var id=$routeParams.param
+    
+    $http({
+        method:"get",
+        url: "http://localhost/api_megacable/tv_en_vivo/"+id
+    }).success(function(data){
+            //console.log(data);
+            $scope.datos=data;
+            $scope.nombre=data.nombre;
+            $scope.descripcion=data.descripcion;
+            $scope.ruta=data.ruta;
+            
+    }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+    });
+    
+    /*Actualizar Banner view*/
+    $scope.agregar_tv_en_vivo=function()
+    {
+        if ($scope.miFormulario.$valid) 
+        {
+            $("#actualizando").show();
+            var nombre = $scope.nombre;
+            var descripcion=$scope.descripcion;
+            var file = $scope.file;
+            var directorio=$scope.file.name;
+
+            imagen.agregar_tv_en_vivo(file).then(function(res){
+                //console.log(res);
+            });
+            
+            $http({
+                method:"put",
+                url: "http://localhost/api_megacable/actualizartv_en_vivo/"+id,
+                data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
+            }).success(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/tv_en_vivo";
+            }).error(function(data){
+                alert("Ha ocurrido un error al actualizar los datos");
+                //console.log(id);
+            })
+        }    
+    }
+
+}]);
+rutas.controller('update_programas_tvController',['$scope', 'imagen', '$http', '$routeParams', function($scope, imagen, $http,$routeParams) 
+{
+    //console.log($routeParams.param);
+    var id=$routeParams.param
+    
+    $http({
+        method:"get",
+        url: "http://localhost/api_megacable/programas_tv/"+id
+    }).success(function(data){
+            //console.log(data);
+            $scope.datos=data;
+            $scope.nombre=data.nombre;
+            $scope.descripcion=data.descripcion;
+            $scope.ruta=data.ruta;
+            
+    }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+    });
+    
+    /*Actualizar Banner view*/
+    $scope.agregar_programas_tv=function()
+    {
+        if ($scope.miFormulario.$valid) 
+        {
+            $("#actualizando").show();
+            var nombre = $scope.nombre;
+            var descripcion=$scope.descripcion;
+            var file = $scope.file;
+            var directorio=$scope.file.name;
+
+            imagen.agregar_programas_tv(file).then(function(res){
+                //console.log(res);
+            });
+            
+            $http({
+                method:"put",
+                url: "http://localhost/api_megacable/actualizarprogramas_tv/"+id,
+                data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
+            }).success(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/programas_tv";
+            }).error(function(data){
+                alert("Ha ocurrido un error al actualizar los datos");
+                //console.log(id);
+            })
+        }    
+    }
+
+}]);
+rutas.controller('update_internetController',['$scope', 'imagen', '$http', '$routeParams', function($scope, imagen, $http,$routeParams) 
+{
+    //console.log($routeParams.param);
+    var id=$routeParams.param
+    
+     $http({
+        method:"get",
+        url: "http://localhost/api_megacable/internet/"+id
+    }).success(function(data){
+            //console.log(data);
+            $scope.datos=data;
+            $scope.velocidades=data.velocidades;
+            $scope.descripcion=data.descripcion;
+            
+    }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+    });
+    
+    $scope.agregar_internet=function()
+    {
+       if ($scope.miFormulario.$valid) 
+        {
+            $("#actualizando").show();
+            var velocidades = $scope.velocidades;
+            var descripcion = $scope.descripcion;
+            console.log(velocidades);
+            console.log(descripcion);
+         
+            $http({
+                method:"put",
+                url: "http://localhost/api_megacable/actualizarinternet/"+id,
+                data: ({'velocidades' : velocidades, 'descripcion' : descripcion})
+            }).success(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/internet";
+            }).error(function(data){
+                console.log(data);
+                alert("Ha ocurrido un error al actualizar los datos");
+                //console.log(id);
+            })
+        }    
+    }
+
+}]);
+rutas.controller('update_networksController',['$scope', 'imagen', '$http', '$routeParams', function($scope, imagen, $http,$routeParams) 
+{
+    //console.log($routeParams.param);
+    var id=$routeParams.param
+    
+    $http({
+        method:"get",
+        url: "http://localhost/api_megacable/networks/"+id
+    }).success(function(data){
+            //console.log(data);
+            $scope.datos=data;
+            $scope.nombre=data.nombre;
+            $scope.descripcion=data.descripcion;
+            $scope.ruta=data.ruta;
+            
+    }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+    });
+    
+    /*Actualizar Banner view*/
+    $scope.agregar_networks=function()
+    {
+        if ($scope.miFormulario.$valid) 
+        {
+            $("#actualizando").show();
+            var nombre = $scope.nombre;
+            var descripcion=$scope.descripcion;
+            var file = $scope.file;
+            var directorio=$scope.file.name;
+
+            imagen.agregar_networks(file).then(function(res){
+                //console.log(res);
+            });
+            
+            $http({
+                method:"put",
+                url: "http://localhost/api_megacable/actualizarnetworks/"+id,
+                data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
+            }).success(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/networks";
+            }).error(function(data){
+                alert("Ha ocurrido un error al actualizar los datos");
+                //console.log(id);
+            })
+        }    
+    }
+
+}]);
+rutas.controller('update_televisionController',['$scope', 'imagen', '$http', '$routeParams', function($scope, imagen, $http,$routeParams) 
+{
+    //console.log($routeParams.param);
+    var id=$routeParams.param
+    
+    $http({
+        method:"get",
+        url: "http://localhost/api_megacable/cable/"+id
+    }).success(function(data){
+            //console.log(data);
+            $scope.datos=data;
+            $scope.nombre=data.nombre;
+            $scope.numero_canales=data.numero_canales;
+            $scope.numero_musica=data.numero_musica;
+            
+    }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+    });
+    
+    /*Actualizar Banner view*/
+    $scope.agregar_tv=function()
+    {
+       if ($scope.miFormulario.$valid) 
+        {
+            $("#actualizando").show();
+            var nombre = $scope.nombre;
+            var numero_canales = $scope.numero_canales;
+            var numero_musica = $scope.numero_musica;
+         
+
+           $http({
+                method:"put",
+                url: "http://localhost/api_megacable/actualizarcable/"+id,
+                data: ({'nombre' : nombre, 'numero_musica' : numero_musica, 'numero_canales' : numero_canales})
+            }).success(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/television";
+            }).error(function(data){
+                console.log(data);
+                alert("Ha ocurrido un error al actualizar los datos");
+                //console.log(id);
+            })
+        }    
+    }
+
+}]);
+rutas.controller('update_telefoniaController',['$scope', 'imagen', '$http', '$routeParams', function($scope, imagen, $http,$routeParams) 
+{
+    //console.log($routeParams.param);
+    var id=$routeParams.param
+    
+    $http({
+        method:"get",
+        url: "http://localhost/api_megacable/telefonia/"+id
+    }).success(function(data){
+            //console.log(data);
+            $scope.datos=data;
+            $scope.nombre=data.nombre;
+            $scope.descripcion=data.descripcion;
+            
+    }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+    });
+    
+    /*Actualizar Banner view*/
+    $scope.agregar_telefonia=function()
+    {
+       if ($scope.miFormulario.$valid) 
+        {
+            $("#actualizando").show();
+            var nombre = $scope.nombre;
+            var descripcion = $scope.descripcion;
+         
+            $http({
+                method:"put",
+                url: "http://localhost/api_megacable/actualizartelefonia/"+id,
+                data: ({'nombre' : nombre, 'descripcion' : descripcion })
+            }).success(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/telefonia";
+            }).error(function(data){
+                console.log(data);
+                alert("Ha ocurrido un error al actualizar los datos");
+                //console.log(id);
+            })
+        }    
+    }
+
 }]);
 rutas.controller('update_banner_viewController',['$scope', 'imagen', '$http', '$routeParams', function($scope, imagen, $http,$routeParams) 
 {
@@ -1051,6 +1791,91 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var formData = new FormData();
         formData.append("file", file);
         return $http.post("http://localhost/api_megacable/insertarimagenfox_mas", formData, {
+            headers: {
+                "Content-type": undefined
+            },
+            transformRequest: angular.identity
+        })
+        .success(function(res)
+        {
+            deferred.resolve(res);
+        })
+        .error(function(msg, code)
+        {
+            deferred.reject(msg);
+        })
+        return deferred.promise;
+    }
+     /*Agregando imagen en  fox mas */
+    this.agregar_networks = function(file)
+    {
+        var deferred = $q.defer();
+        var formData = new FormData();
+        formData.append("file", file);
+        return $http.post("http://localhost/api_megacable/insertarimagennetwork", formData, {
+            headers: {
+                "Content-type": undefined
+            },
+            transformRequest: angular.identity
+        })
+        .success(function(res)
+        {
+            deferred.resolve(res);
+        })
+        .error(function(msg, code)
+        {
+            deferred.reject(msg);
+        })
+        return deferred.promise;
+    }
+    this.agregar_programas_tv = function(file)
+    {
+        var deferred = $q.defer();
+        var formData = new FormData();
+        formData.append("file", file);
+        return $http.post("http://localhost/api_megacable/insertarimagenprogramas_tv", formData, {
+            headers: {
+                "Content-type": undefined
+            },
+            transformRequest: angular.identity
+        })
+        .success(function(res)
+        {
+            deferred.resolve(res);
+        })
+        .error(function(msg, code)
+        {
+            deferred.reject(msg);
+        })
+        return deferred.promise;
+    }
+    this.agregar_internet = function(file)
+    {
+        var deferred = $q.defer();
+        var formData = new FormData();
+        formData.append("file", file);
+        return $http.post("http://localhost/api_megacable/insertarimageninternet", formData, {
+            headers: {
+                "Content-type": undefined
+            },
+            transformRequest: angular.identity
+        })
+        .success(function(res)
+        {
+            deferred.resolve(res);
+        })
+        .error(function(msg, code)
+        {
+            deferred.reject(msg);
+        })
+        return deferred.promise;
+    }
+    this.agregar_tv_en_vivo = function(file)
+    {
+        var deferred = $q.defer();
+        var formData = new FormData();
+        formData.append("file", file);
+        return $http.post("http://localhost/api_megacable/insertarimagentv_en_vivo", formData, {
             headers: {
                 "Content-type": undefined
             },

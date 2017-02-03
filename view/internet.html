@@ -1,0 +1,41 @@
+<br><br><br><br>
+<div class="container" ng-controller="internetController">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Internet:</h1>
+      <a class="btn btn-primary" href="#/internet/add">Agregar</a>
+      <br><br>
+      <div class="progress" id="cargando">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+              Cargando
+          </div>
+      </div>
+			<table class="table table-bordered">
+  				<tr>
+  					<td><strong>Imagen</strong></td>
+  					<td><strong>Velocidades</strong></td>
+            		<td><strong>Descripcion</strong></td>
+  					
+				  </tr>
+  				<tr ng-repeat="data in datos">
+  					<td width="50px" height="50px">
+              			<a href="http://localhost/api_megacable/imagenes/internet/{{data.ruta}}" target="_blank">
+                  			<img src="http://localhost/api_megacable/imagenes/internet/{{data.ruta}}" width="100px" height="120px">
+              			</a>
+            		</td>
+            		<td>{{data.velocidades}}Mbps</td>
+  						<td>{{data.descripcion}}</td>
+  					<td>
+                	<a href="#/internet/update/{{data.id}}">
+                    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                	</a>   
+                <a href ng-click="eliminar_internet(data.id,data.ruta)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+            </td>       
+  				</tr>
+  				
+			</table>
+		</div>	
+	</div>
+</div>	
