@@ -10,9 +10,9 @@ $( document ).ready(function() {
                 //console.log(data);
                 $.each(data, function(index, data){
                     $("#television").append("<td><input type='radio' name='television' class='rbtelevision' value='"+data.id+"'></td>");
-                    $("#television").append("<td>"+data.nombre+"</td>");
-                    $("#television").append("<td>"+data.numero_canales+" Canales</td>");
-                    $("#television").append("<td>"+data.numero_musica+" Canales de Musica</td>");
+                    $("#television").append("<td><p style='text-align:center;'>"+data.nombre+"</p></td>");
+                    //$("#television").append("<td>"+data.numero_canales+" Canales</td>");
+                    //$("#television").append("<td>"+data.numero_musica+" Canales de Musica</td>");
                 });
             },
             error: function (response) {

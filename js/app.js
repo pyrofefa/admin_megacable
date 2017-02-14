@@ -755,7 +755,90 @@ rutas.controller('paquetesController', ['$scope', 'imagen', '$http', function ($
         });
 
         /*Eliminar banner footer*/
-        $scope.eliminar_internet=function(id,ruta)
+        $scope.eliminar_paquete=function(id,ruta)
+        {
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarpaquete/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+}]);
+rutas.controller('paquetesdobleController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+            method:"get",
+            url: "http://localhost/api_megacable/paquete_dos_internet"
+        })
+        .success(function(data)
+        {
+            console.log(data);
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_paquete=function(id,ruta)
+        {
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarinternet/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+}]);
+rutas.controller('paquetesdobletController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+            method:"get",
+            url: "http://localhost/api_megacable/paquete_dos_telefonia"
+        }).success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_paquete=function(id,ruta)
+        {
+            $http({
+            method:"delete",
+            url: "http://localhost/api_megacable/eliminarinternet/"+id
+                }).success(function(data){
+                    alert("Datos eliminados con exito");
+                    location.reload();
+                }).error(function(data){
+                    alert("Ha ocurrido un error al eliminar los datos");
+            })
+        }
+}]);
+rutas.controller('paqueteunoController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
+{
+        $http({
+            method:"get",
+            url: "http://localhost/api_megacable/paquete_uno"
+        }).success(function(data)
+        {
+            $scope.datos=data;
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+
+        /*Eliminar banner footer*/
+        $scope.eliminar_paquete=function(id,ruta)
         {
             $http({
             method:"delete",

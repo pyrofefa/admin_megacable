@@ -29,12 +29,81 @@
   					  <td>{{data.precio_pronto}}</td>
               <td>{{data.precio}}</td> 
               <td>
-                <a href ng-click="eliminar_internet(data.id,data.ruta)">
+                <a href ng-click="eliminar_paquete(data.id,data.ruta)">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </a>
               </td>       
   				</tr>
   		</table>
+      <h1>Doble Play</h1>
+      <table class="table table-bordered" ng-controller="paquetesdobleController">
+          <tr>
+            <td><strong>Television</strong></td>
+            <td><strong>Internet</strong></td>
+                 <td><strong>Precio Pronto Pago</strong></td>
+                <td><strong>Precio Normal</strong></td>
+          </tr>
+          <tr ng-repeat="data in datos">
+              <td>
+                {{data.nombre}}<br>
+                {{data.numero_canales}} Canales <br>
+                {{data.numero_musica}} Canales de musica
+              </td>
+              <td>{{data.velocidades}}Mbps</td>
+               <td>{{data.precio_pronto}}</td>
+              <td>{{data.precio}}</td> 
+              <td>
+                <a href ng-click="eliminar_paquete(data.id,data.ruta)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+              </td>       
+          </tr>
+      </table>
+      <table class="table table-bordered" ng-controller="paquetesdobletController">
+          <tr>
+            <td><strong>Television</strong></td>
+            <td><strong>Telefonia</strong></td>
+            <td><strong>Precio Pronto Pago</strong></td>
+            <td><strong>Precio Normal</strong></td>
+          </tr>
+          <tr ng-repeat="data in datos">
+              <td>
+                {{data.nombre}}<br>
+                {{data.numero_canales}} Canales <br>
+                {{data.numero_musica}} Canales de musica
+              </td>
+               <td>{{data.descripcion}}</td>
+              <td>{{data.precio_pronto}}</td>
+              <td>{{data.precio}}</td> 
+              <td>
+                <a href ng-click="eliminar_internet(data.id,data.ruta)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+              </td>       
+          </tr>
+      </table>
+      <h1>Un Servicio</h1>
+      <table class="table table-bordered" ng-controller="paqueteunoController">
+          <tr>
+            <td><strong>Television</strong></td>
+            <td><strong>Precio Pronto Pago</strong></td>
+            <td><strong>Precio Normal</strong></td>
+          </tr>
+          <tr ng-repeat="data in datos">
+              <td>
+                {{data.nombre}}<br>
+                {{data.numero_canales}} Canales <br>
+                {{data.numero_musica}} Canales de musica
+              </td>
+              <td>{{data.precio_pronto}}</td>
+              <td>{{data.precio}}</td> 
+              <td>
+                <a href ng-click="eliminar_internet(data.id,data.ruta)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+              </td>       
+          </tr>
+      </table>
 		</div>	
 	</div>
 </div>
