@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 
     $.ajax({
-        url: "http://localhost/api_megacable/cable",
+        url: "http://clientes.teknol.net/api_megacable/cable",
         data: "{}",
         dataType: "json",
         type: "GET",
@@ -26,7 +26,7 @@ $( document ).ready(function() {
     });
 
     $.ajax({
-        url: "http://localhost/api_megacable/internet",
+        url: "http://clientes.teknol.net/api_megacable/internet",
         data: "{}",
         dataType: "json",
         type: "GET",
@@ -49,7 +49,7 @@ $( document ).ready(function() {
     });
 
     $.ajax({
-        url: "http://localhost/api_megacable/telefonia",
+        url: "http://clientes.teknol.net/api_megacable/telefonia",
         data: "{}",
         dataType: "json",
         type: "GET",
@@ -83,7 +83,7 @@ $( document ).ready(function() {
 
         console.log(datos);
         $.ajax({
-            url: "http://localhost/api_megacable/agregarpaquete",
+            url: "http://clientes.teknol.net/api_megacable/agregarpaquete",
             type: 'post',
             data: JSON.stringify(datos),
             dataType: 'json'
