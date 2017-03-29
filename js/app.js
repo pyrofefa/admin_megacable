@@ -34,7 +34,7 @@ rutas.config(function($routeProvider) {
             templateUrl : 'view/update_banner_footer.html',
             controller  : 'update_banner_footerController'
         })
-		.when('/fox_mas', {
+        .when('/fox_mas', {
             templateUrl : 'view/fox_mas.html',
             controller  : 'fox_masController'
         })
@@ -46,7 +46,7 @@ rutas.config(function($routeProvider) {
             templateUrl : 'view/update_fox_mas.html',
             controller  : 'update_fox_masController'
         })
-		.when('/hbo_max', {
+        .when('/hbo_max', {
             templateUrl : 'view/hbo_max.html',
             controller  : 'hbo_maxController'
         })
@@ -58,7 +58,7 @@ rutas.config(function($routeProvider) {
             templateUrl : 'view/update_hbo_max.html',
             controller  : 'update_hbo_maxController'
         })
-		.when('/peliculas', {
+        .when('/peliculas', {
             templateUrl : 'view/peliculas.html',
             controller  : 'peliculasController'
         })
@@ -178,6 +178,14 @@ rutas.config(function($routeProvider) {
             templateUrl : 'view/update_networks.html',
             controller  : 'update_networksController'
         })
+        .when('/ruleta', {
+            templateUrl : 'view/ruleta.html',
+            controller  : 'ruletaController'
+        })
+        .when('/ruleta/update/:param', {
+            templateUrl : 'view/update_ruleta.html',
+            controller  : 'update_ruletaController'
+        })
         /*final*/  
         .otherwise({
             redirectTo: '/'
@@ -186,12 +194,65 @@ rutas.config(function($routeProvider) {
 });
 rutas.controller('inicioController', function($scope) 
 {});
+rutas.controller('ruletaController',['$scope', 'imagen', '$http', function ($scope, imagen, $http)
+{
+    $http({
+        method:"get",
+        url: "http://clientes.teknol.net/api_megacable/ruleta"
+        }).success(function(data){
+            $scope.datos=data;
+            console.log(data);
+            $("#cargando").hide();
+        }).error(function(data){
+            alert("Ha ocurrido un error al mostrar los datos");
+        });
+}]);
+rutas.controller('update_ruletaController',['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) 
+{
+    //console.log($routeParams.param);
+    var id=$routeParams.param
+    
+    $http({
+        method:"get",
+        url: "http://clientes.teknol.net/api_megacable/ruleta/"+id
+    }).success(function(data){
+            //console.log(data);
+            $scope.datos=data;
+            $scope.numero=data.numero;
+            
+    }).error(function(data){
+        alert("Ha ocurrido un error al mostrar los datos");
+    });
+    
+    /*Actualizar Banner view*/
+    $scope.agregar_ruleta=function()
+    {
+        if ($scope.miFormulario.$valid) 
+        {
+            $("#actualizando").show();
+            var numero = $scope.numero;
+
+            $http({
+                method:"put",
+                url: "http://clientes.teknol.net/api_megacable/actualizarruleta/"+id,
+                data: ({'nombre' : numero })
+            }).success(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/ruleta";
+            }).error(function(data){
+                alert("Datos actualizados con exito");
+                window.location.href="#/ruleta";                //console.log(id);
+            })
+        }    
+    }
+
+}]);
 rutas.controller('banner_viewController',['$scope', 'imagen', '$http', function ($scope, imagen, $http)
 {
     /*traer*/
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/listaimagenes"
+        url: "http://clientes.teknol.net/api_megacable/listaimagenes"
         }).success(function(data){
             $scope.datos=data;
             //console.log(data);
@@ -214,7 +275,7 @@ rutas.controller('banner_viewController',['$scope', 'imagen', '$http', function 
             });
             $http({
                 method:"post",
-                url: "http://localhost/api_megacable/agregarlistaimagenes",
+                url: "http://clientes.teknol.net/api_megacable/agregarlistaimagenes",
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos guardados con exito");
@@ -233,7 +294,7 @@ rutas.controller('banner_viewController',['$scope', 'imagen', '$http', function 
 
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagen/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagen/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -243,7 +304,7 @@ rutas.controller('banner_viewController',['$scope', 'imagen', '$http', function 
             //Elminar banner view
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarlistaimagen/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarlistaimagen/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -257,7 +318,7 @@ rutas.controller('banner_footerController', ['$scope', 'imagen', '$http', functi
 {
    $http({
         method:"get",
-        url: "http://localhost/api_megacable/listaimagenesfooter"})
+        url: "http://clientes.teknol.net/api_megacable/listaimagenesfooter"})
         .success(function(data)
         {
             $scope.datos=data;
@@ -271,7 +332,7 @@ rutas.controller('banner_footerController', ['$scope', 'imagen', '$http', functi
         {
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagenfooter/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagenfooter/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -280,7 +341,7 @@ rutas.controller('banner_footerController', ['$scope', 'imagen', '$http', functi
             });
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarlistaimagenfooter/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarlistaimagenfooter/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -301,7 +362,7 @@ rutas.controller('banner_footerController', ['$scope', 'imagen', '$http', functi
             });
             $http({
                 method:"post",
-                url: "http://localhost/api_megacable/agregarlistaimagenesfooter",
+                url: "http://clientes.teknol.net/api_megacable/agregarlistaimagenesfooter",
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos guardados con exito");
@@ -317,7 +378,7 @@ rutas.controller('fox_masController', ['$scope', 'imagen', '$http', function ($s
     $scope.mes = new Date();
      $http({
         method:"get",
-        url: "http://localhost/api_megacable/fox_mas"}).success(function(data)
+        url: "http://clientes.teknol.net/api_megacable/fox_mas"}).success(function(data)
         {
             $scope.datos=data;
             $("#cargando").hide();
@@ -330,7 +391,7 @@ rutas.controller('fox_masController', ['$scope', 'imagen', '$http', function ($s
         {
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagenfox_mas/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagenfox_mas/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -339,7 +400,7 @@ rutas.controller('fox_masController', ['$scope', 'imagen', '$http', function ($s
             });
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarfox_mas/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarfox_mas/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -362,7 +423,7 @@ rutas.controller('fox_masController', ['$scope', 'imagen', '$http', function ($s
             });
             $http({
                 method:"post",
-                url: "http://localhost/api_megacable/agregarfox_mas",
+                url: "http://clientes.teknol.net/api_megacable/agregarfox_mas",
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
             }).success(function(data){
                 alert("Datos guardados con exito");
@@ -378,7 +439,7 @@ rutas.controller('hbo_maxController', ['$scope', 'imagen', '$http', function ($s
     $scope.mes = new Date();
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/hbo_max"
+        url: "http://clientes.teknol.net/api_megacable/hbo_max"
         }).success(function(data){
             $scope.datos=data;
             //console.log(data);
@@ -391,7 +452,7 @@ rutas.controller('hbo_maxController', ['$scope', 'imagen', '$http', function ($s
     {
         $http({
         method:"delete",
-        url: "http://localhost/api_megacable/eliminarimagenhbo/"+ruta
+        url: "http://clientes.teknol.net/api_megacable/eliminarimagenhbo/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -401,7 +462,7 @@ rutas.controller('hbo_maxController', ['$scope', 'imagen', '$http', function ($s
 
         $http({
         method:"delete",
-        url: "http://localhost/api_megacable/eliminarhbo_max/"+id
+        url: "http://clientes.teknol.net/api_megacable/eliminarhbo_max/"+id
             }).success(function(data){
                 alert("Datos eliminados con exito");
                 location.reload();
@@ -426,7 +487,7 @@ rutas.controller('hbo_maxController', ['$scope', 'imagen', '$http', function ($s
             });
             $http({
                 method:"post",
-                url: "http://localhost/api_megacable/agregarhbo_max",
+                url: "http://clientes.teknol.net/api_megacable/agregarhbo_max",
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
             }).success(function(data){
                 alert("Datos Guardados con exito");
@@ -443,7 +504,7 @@ rutas.controller('peliculasController', ['$scope', 'imagen', '$http', function (
     $scope.mes = new Date();
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/peliculas"}).success(function(data)
+        url: "http://clientes.teknol.net/api_megacable/peliculas"}).success(function(data)
         {
             $scope.datos=data;
             $("#cargando").hide();
@@ -454,7 +515,7 @@ rutas.controller('peliculasController', ['$scope', 'imagen', '$http', function (
         {
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagenpeliculas/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagenpeliculas/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -464,7 +525,7 @@ rutas.controller('peliculasController', ['$scope', 'imagen', '$http', function (
 
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarpelicula/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarpelicula/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -490,7 +551,7 @@ rutas.controller('peliculasController', ['$scope', 'imagen', '$http', function (
             });
             $http({
                 method:"post",
-                url: "http://localhost/api_megacable/agregarpelicula",
+                url: "http://clientes.teknol.net/api_megacable/agregarpelicula",
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
             }).success(function(data){
                 alert("Datos Actualizados con exito");
@@ -508,7 +569,7 @@ rutas.controller('ppvController', ['$scope', 'imagen', '$http', function ($scope
     $scope.mes = new Date();
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/ppv"
+        url: "http://clientes.teknol.net/api_megacable/ppv"
         }).success(function(data){
             $scope.datos=data;
             //console.log(data);
@@ -524,7 +585,7 @@ rutas.controller('ppvController', ['$scope', 'imagen', '$http', function ($scope
 
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagenppv/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagenppv/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -534,7 +595,7 @@ rutas.controller('ppvController', ['$scope', 'imagen', '$http', function ($scope
             
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarppv/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarppv/"+id
                 }).success(function(data){
                     alert("Datos Eliminados con exito");
                     location.reload();
@@ -559,7 +620,7 @@ rutas.controller('ppvController', ['$scope', 'imagen', '$http', function ($scope
                 });
                 $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregarppv",
+                    url: "http://clientes.teknol.net/api_megacable/agregarppv",
                     data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
                 }).success(function(data){
                     alert("Datos guardados con exito");
@@ -575,7 +636,7 @@ rutas.controller('promosController', ['$scope', 'imagen', '$http', function ($sc
 {
         $http({
         method:"get",
-        url: "http://localhost/api_megacable/promociones"}).success(function(data)
+        url: "http://clientes.teknol.net/api_megacable/promociones"}).success(function(data)
         {
             $scope.datos=data;
             $("#cargando").hide();
@@ -588,7 +649,7 @@ rutas.controller('promosController', ['$scope', 'imagen', '$http', function ($sc
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarimagenpromos/"+ruta
+            url: "http://clientes.teknol.net/api_megacable/eliminarimagenpromos/"+ruta
                 }).success(function(data){
                     //console.log(data);
                     $scope.datos=data;
@@ -597,7 +658,7 @@ rutas.controller('promosController', ['$scope', 'imagen', '$http', function ($sc
             });
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarpromo/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarpromo/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -622,7 +683,7 @@ rutas.controller('promosController', ['$scope', 'imagen', '$http', function ($sc
                 });
                 $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregarpromos",
+                    url: "http://clientes.teknol.net/api_megacable/agregarpromos",
                     data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion,'encabezado' : encabezado})
                 }).success(function(data){
                     alert("Datos Guardados con exito");
@@ -638,7 +699,7 @@ rutas.controller('televisionController', ['$scope', 'imagen', '$http', function 
 {
         $http({
         method:"get",
-        url: "http://localhost/api_megacable/cable"})
+        url: "http://clientes.teknol.net/api_megacable/cable"})
         .success(function(data)
         {
             $scope.datos=data;
@@ -652,7 +713,7 @@ rutas.controller('televisionController', ['$scope', 'imagen', '$http', function 
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarcable/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarcable/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -672,7 +733,7 @@ rutas.controller('televisionController', ['$scope', 'imagen', '$http', function 
 
                 $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregartelevision",
+                    url: "http://clientes.teknol.net/api_megacable/agregartelevision",
                     data: ({ 'nombre' : nombre , 'numero_canales' :  numero_canales, 'numero_musica' : numero_musica })
                 }).success(function(data){
                     alert("Datos Guardados con exito");
@@ -688,7 +749,7 @@ rutas.controller('internetController', ['$scope', 'imagen', '$http', function ($
 {
         $http({
         method:"get",
-        url: "http://localhost/api_megacable/internet"})
+        url: "http://clientes.teknol.net/api_megacable/internet"})
         .success(function(data)
         {   
             $scope.datos = [];
@@ -703,7 +764,7 @@ rutas.controller('internetController', ['$scope', 'imagen', '$http', function ($
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarinternet/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarinternet/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -729,7 +790,7 @@ rutas.controller('internetController', ['$scope', 'imagen', '$http', function ($
 
                $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregarinternet",
+                    url: "http://clientes.teknol.net/api_megacable/agregarinternet",
                     data: ({ 'velocidades' : velocidades , 'descripcion' :  descripcion, 'ruta' : directorio })
                 }).success(function(data){
                     alert("Datos Guardados con exito");
@@ -744,9 +805,8 @@ rutas.controller('internetController', ['$scope', 'imagen', '$http', function ($
 rutas.controller('paquetesController', ['$scope', 'imagen', '$http', function ($scope, imagen, $http) 
 {
         $http({
-            method:"get",
-            url: "http://localhost/api_megacable/paquete_tres"
-        })
+        method:"get",
+        url: "http://clientes.teknol.net/api_megacable/paquete_tres"})
         .success(function(data)
         {
             $scope.datos=data;
@@ -760,7 +820,7 @@ rutas.controller('paquetesController', ['$scope', 'imagen', '$http', function ($
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarpaquete/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarpaquete/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -773,7 +833,7 @@ rutas.controller('paquetesdobleController', ['$scope', 'imagen', '$http', functi
 {
         $http({
             method:"get",
-            url: "http://localhost/api_megacable/paquete_dos_internet"
+            url: "http://clientes.teknol.net/api_megacable/paquete_dos_internet"
         })
         .success(function(data)
         {
@@ -787,11 +847,9 @@ rutas.controller('paquetesdobleController', ['$scope', 'imagen', '$http', functi
         /*Eliminar banner footer*/
         $scope.eliminar_paquete=function(id,ruta)
         {
-            alert();
-            console.log(id);
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarpaquete/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarinternet/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -804,7 +862,7 @@ rutas.controller('paquetesdobletController', ['$scope', 'imagen', '$http', funct
 {
         $http({
             method:"get",
-            url: "http://localhost/api_megacable/paquete_dos_telefonia"
+            url: "http://clientes.teknol.net/api_megacable/paquete_dos_telefonia"
         }).success(function(data)
         {
             $scope.datos=data;
@@ -818,7 +876,7 @@ rutas.controller('paquetesdobletController', ['$scope', 'imagen', '$http', funct
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarpaquete/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarinternet/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -831,7 +889,7 @@ rutas.controller('paqueteunoController', ['$scope', 'imagen', '$http', function 
 {
         $http({
             method:"get",
-            url: "http://localhost/api_megacable/paquete_uno"
+            url: "http://clientes.teknol.net/api_megacable/paquete_uno"
         }).success(function(data)
         {
             $scope.datos=data;
@@ -845,7 +903,7 @@ rutas.controller('paqueteunoController', ['$scope', 'imagen', '$http', function 
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarpaquete/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarinternet/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -858,7 +916,7 @@ rutas.controller('telefoniaController', ['$scope', 'imagen', '$http', function (
 {
         $http({
         method:"get",
-        url: "http://localhost/api_megacable/telefonia"})
+        url: "http://clientes.teknol.net/api_megacable/telefonia"})
         .success(function(data)
         {
             $scope.datos=data;
@@ -872,7 +930,7 @@ rutas.controller('telefoniaController', ['$scope', 'imagen', '$http', function (
         {
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminartelefonia/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminartelefonia/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -890,7 +948,7 @@ rutas.controller('telefoniaController', ['$scope', 'imagen', '$http', function (
 
                $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregartelefonia",
+                    url: "http://clientes.teknol.net/api_megacable/agregartelefonia",
                     data: ({ 'nombre' : nombre , 'descripcion' :  descripcion })
                 }).success(function(data){
                     alert("Datos Guardados con exito");
@@ -906,7 +964,7 @@ rutas.controller('tv_en_vivoController', ['$scope', 'imagen', '$http', function 
 {
         $http({
         method:"get",
-        url: "http://localhost/api_megacable/tv_en_vivo"})
+        url: "http://clientes.teknol.net/api_megacable/tv_en_vivo"})
         .success(function(data)
         {
             $scope.datos=data;
@@ -921,7 +979,7 @@ rutas.controller('tv_en_vivoController', ['$scope', 'imagen', '$http', function 
 
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagentv_en_vivo/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagentv_en_vivo/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -931,7 +989,7 @@ rutas.controller('tv_en_vivoController', ['$scope', 'imagen', '$http', function 
 
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminartv_en_vivo/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminartv_en_vivo/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -955,7 +1013,7 @@ rutas.controller('tv_en_vivoController', ['$scope', 'imagen', '$http', function 
                 });
                 $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregar_tv_en_vivo",
+                    url: "http://clientes.teknol.net/api_megacable/agregar_tv_en_vivo",
                     data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion})
                 }).success(function(data){
                     alert("Datos Guardados con exito");
@@ -971,7 +1029,7 @@ rutas.controller('networksController', ['$scope', 'imagen', '$http', function ($
 {
         $http({
         method:"get",
-        url: "http://localhost/api_megacable/networks"})
+        url: "http://clientes.teknol.net/api_megacable/networks"})
         .success(function(data)
         {
             $scope.datos=data;
@@ -986,7 +1044,7 @@ rutas.controller('networksController', ['$scope', 'imagen', '$http', function ($
 
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagennetworks/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagennetworks/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -996,7 +1054,7 @@ rutas.controller('networksController', ['$scope', 'imagen', '$http', function ($
 
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarnetworks/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarnetworks/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -1020,7 +1078,7 @@ rutas.controller('networksController', ['$scope', 'imagen', '$http', function ($
                 });
                 $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregarnetwork",
+                    url: "http://clientes.teknol.net/api_megacable/agregarnetwork",
                     data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion})
                 }).success(function(data){
                     alert("Datos Guardados con exito");
@@ -1036,7 +1094,7 @@ rutas.controller('programas_tvController', ['$scope', 'imagen', '$http', functio
 {
         $http({
         method:"get",
-        url: "http://localhost/api_megacable/programas_tv"
+        url: "http://clientes.teknol.net/api_megacable/programas_tv"
         }).success(function(data)
         {
             $scope.datos=data;
@@ -1050,7 +1108,7 @@ rutas.controller('programas_tvController', ['$scope', 'imagen', '$http', functio
 
             $http({
                 method:"delete",
-                url: "http://localhost/api_megacable/eliminarimagenprogramas_tv/"+ruta
+                url: "http://clientes.teknol.net/api_megacable/eliminarimagenprogramas_tv/"+ruta
             }).success(function(data){
                 //console.log(data);
                 $scope.datos=data;
@@ -1060,7 +1118,7 @@ rutas.controller('programas_tvController', ['$scope', 'imagen', '$http', functio
 
             $http({
             method:"delete",
-            url: "http://localhost/api_megacable/eliminarprogramas_tv/"+id
+            url: "http://clientes.teknol.net/api_megacable/eliminarprogramas_tv/"+id
                 }).success(function(data){
                     alert("Datos eliminados con exito");
                     location.reload();
@@ -1084,7 +1142,7 @@ rutas.controller('programas_tvController', ['$scope', 'imagen', '$http', functio
                 });
                 $http({
                     method:"post",
-                    url: "http://localhost/api_megacable/agregarprogramas_tv",
+                    url: "http://clientes.teknol.net/api_megacable/agregarprogramas_tv",
                     data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion})
                 }).success(function(data){
                     alert("Datos Guardados con exito");
@@ -1103,7 +1161,7 @@ rutas.controller('update_tv_en_vivoController',['$scope', 'imagen', '$http', '$r
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/tv_en_vivo/"+id
+        url: "http://clientes.teknol.net/api_megacable/tv_en_vivo/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1132,7 +1190,7 @@ rutas.controller('update_tv_en_vivoController',['$scope', 'imagen', '$http', '$r
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizartv_en_vivo/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizartv_en_vivo/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1152,7 +1210,7 @@ rutas.controller('update_programas_tvController',['$scope', 'imagen', '$http', '
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/programas_tv/"+id
+        url: "http://clientes.teknol.net/api_megacable/programas_tv/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1181,7 +1239,7 @@ rutas.controller('update_programas_tvController',['$scope', 'imagen', '$http', '
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarprogramas_tv/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarprogramas_tv/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1201,7 +1259,7 @@ rutas.controller('update_internetController',['$scope', 'imagen', '$http', '$rou
     
      $http({
         method:"get",
-        url: "http://localhost/api_megacable/internet/"+id
+        url: "http://clientes.teknol.net/api_megacable/internet/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1224,7 +1282,7 @@ rutas.controller('update_internetController',['$scope', 'imagen', '$http', '$rou
          
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarinternet/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarinternet/"+id,
                 data: ({'velocidades' : velocidades, 'descripcion' : descripcion})
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1245,7 +1303,7 @@ rutas.controller('update_networksController',['$scope', 'imagen', '$http', '$rou
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/networks/"+id
+        url: "http://clientes.teknol.net/api_megacable/networks/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1274,7 +1332,7 @@ rutas.controller('update_networksController',['$scope', 'imagen', '$http', '$rou
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarnetworks/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarnetworks/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1294,7 +1352,7 @@ rutas.controller('update_televisionController',['$scope', 'imagen', '$http', '$r
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/cable/"+id
+        url: "http://clientes.teknol.net/api_megacable/cable/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1319,7 +1377,7 @@ rutas.controller('update_televisionController',['$scope', 'imagen', '$http', '$r
 
            $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarcable/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarcable/"+id,
                 data: ({'nombre' : nombre, 'numero_musica' : numero_musica, 'numero_canales' : numero_canales})
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1340,7 +1398,7 @@ rutas.controller('update_telefoniaController',['$scope', 'imagen', '$http', '$ro
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/telefonia/"+id
+        url: "http://clientes.teknol.net/api_megacable/telefonia/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1362,7 +1420,7 @@ rutas.controller('update_telefoniaController',['$scope', 'imagen', '$http', '$ro
          
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizartelefonia/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizartelefonia/"+id,
                 data: ({'nombre' : nombre, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1383,7 +1441,7 @@ rutas.controller('update_banner_viewController',['$scope', 'imagen', '$http', '$
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/listaimagenes/"+id
+        url: "http://clientes.teknol.net/api_megacable/listaimagenes/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1412,7 +1470,7 @@ rutas.controller('update_banner_viewController',['$scope', 'imagen', '$http', '$
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarlistaimagenes/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarlistaimagenes/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1433,7 +1491,7 @@ rutas.controller('update_banner_footerController',['$scope', 'imagen', '$http', 
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/listaimagenesfooter/"+id
+        url: "http://clientes.teknol.net/api_megacable/listaimagenesfooter/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1461,7 +1519,7 @@ rutas.controller('update_banner_footerController',['$scope', 'imagen', '$http', 
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarlistaimagenesfooter/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarlistaimagenesfooter/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1481,7 +1539,7 @@ rutas.controller('update_promosController',['$scope', 'imagen', '$http', '$route
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/promociones/"+id
+        url: "http://clientes.teknol.net/api_megacable/promociones/"+id
     }).success(function(data){
             console.log(data);
             $scope.datos=data;
@@ -1510,7 +1568,7 @@ rutas.controller('update_promosController',['$scope', 'imagen', '$http', '$route
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarpromo/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarpromo/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'encabezado' : encabezado })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1530,7 +1588,7 @@ rutas.controller('update_peliculasController',['$scope', 'imagen', '$http', '$ro
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/peliculas/"+id
+        url: "http://clientes.teknol.net/api_megacable/peliculas/"+id
     }).success(function(data){
             console.log(data);
             $scope.datos=data;
@@ -1559,7 +1617,7 @@ rutas.controller('update_peliculasController',['$scope', 'imagen', '$http', '$ro
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarpelicula/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarpelicula/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1578,7 +1636,7 @@ rutas.controller('update_hbo_maxController',['$scope', 'imagen', '$http', '$rout
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/hbo_max/"+id
+        url: "http://clientes.teknol.net/api_megacable/hbo_max/"+id
     }).success(function(data){
             console.log(data);
             $scope.datos=data;
@@ -1607,7 +1665,7 @@ rutas.controller('update_hbo_maxController',['$scope', 'imagen', '$http', '$rout
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarhbo_max/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarhbo_max/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1626,7 +1684,7 @@ rutas.controller('update_ppvController',['$scope', 'imagen', '$http', '$routePar
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/ppv/"+id
+        url: "http://clientes.teknol.net/api_megacable/ppv/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1656,7 +1714,7 @@ rutas.controller('update_ppvController',['$scope', 'imagen', '$http', '$routePar
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarppv/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarppv/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1676,7 +1734,7 @@ rutas.controller('update_fox_masController',['$scope', 'imagen', '$http', '$rout
     
     $http({
         method:"get",
-        url: "http://localhost/api_megacable/fox_mas/"+id
+        url: "http://clientes.teknol.net/api_megacable/fox_mas/"+id
     }).success(function(data){
             //console.log(data);
             $scope.datos=data;
@@ -1705,7 +1763,7 @@ rutas.controller('update_fox_masController',['$scope', 'imagen', '$http', '$rout
             
             $http({
                 method:"put",
-                url: "http://localhost/api_megacable/actualizarfox_mas/"+id,
+                url: "http://clientes.teknol.net/api_megacable/actualizarfox_mas/"+id,
                 data: ({'nombre' : nombre , 'ruta' :  directorio, 'descripcion' : descripcion, 'mes' : mes })
             }).success(function(data){
                 alert("Datos actualizados con exito");
@@ -1739,7 +1797,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var deferred = $q.defer();
         var formData = new FormData();
         formData.append("file", file);
-        return $http.post("http://localhost/api_megacable/insertarimagen", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagen", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1761,7 +1819,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var deferred = $q.defer();
         var formData = new FormData();
         formData.append("file", file);
-        return $http.post("http://localhost/api_megacable/insertarimagenfooter", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagenfooter", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1784,7 +1842,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var formData = new FormData();
         formData.append("file", file);
 
-        return $http.post("http://localhost/api_megacable/insertarimagenpromos", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagenpromos", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1807,7 +1865,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var formData = new FormData();
         formData.append("file", file);
 
-        return $http.post("http://localhost/api_megacable/insertarimagenpeliculas", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagenpeliculas", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1830,7 +1888,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var formData = new FormData();
         formData.append("file", file);
 
-        return $http.post("http://localhost/api_megacable/insertarimagenhbo", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagenhbo", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1854,7 +1912,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var formData = new FormData();
         formData.append("file", file);
         
-        return $http.post("http://localhost/api_megacable/insertarimagenppv", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagenppv", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1876,7 +1934,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var deferred = $q.defer();
         var formData = new FormData();
         formData.append("file", file);
-        return $http.post("http://localhost/api_megacable/insertarimagenfox_mas", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagenfox_mas", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1898,7 +1956,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var deferred = $q.defer();
         var formData = new FormData();
         formData.append("file", file);
-        return $http.post("http://localhost/api_megacable/insertarimagennetwork", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagennetwork", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1919,7 +1977,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var deferred = $q.defer();
         var formData = new FormData();
         formData.append("file", file);
-        return $http.post("http://localhost/api_megacable/insertarimagenprogramas_tv", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagenprogramas_tv", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1940,7 +1998,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var deferred = $q.defer();
         var formData = new FormData();
         formData.append("file", file);
-        return $http.post("http://localhost/api_megacable/insertarimageninternet", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimageninternet", formData, {
             headers: {
                 "Content-type": undefined
             },
@@ -1961,7 +2019,7 @@ rutas.service('imagen', ["$http", "$q", function ($http, $q)
         var deferred = $q.defer();
         var formData = new FormData();
         formData.append("file", file);
-        return $http.post("http://localhost/api_megacable/insertarimagentv_en_vivo", formData, {
+        return $http.post("http://clientes.teknol.net/api_megacable/insertarimagentv_en_vivo", formData, {
             headers: {
                 "Content-type": undefined
             },
