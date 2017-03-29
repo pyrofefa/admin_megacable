@@ -1,2 +1,60 @@
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<h1>Update Paquetes</h1>
+<br><br><br><br>
+<div class="container" ng-controller="paquetesController">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Actualizar</h1>
+			<div class="progress" id="guardando" hidden>
+          		<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+              		Guardando Datos
+          		</div>
+      		</div>
+
+				<select class="selectpicker" id="tipo">
+  					<option value="3">Triple Play</option>
+  					<option value="2">Doble Play</option>
+  					<option value="1">Un Servicio</option>
+				</select>
+			  	
+          <h1>Television</h1>
+			  	<table class="table table-bordered">
+  				    <tbody>
+              <tr></tr>
+  				    </tbody>
+              <tbody>              
+                  <tr id="television"></tr>
+              </tbody>    
+  				</table>
+
+          <h1>Internet</h1>
+          <table class="table table-bordered">
+              <tbody>
+              <tr></tr>
+              </tbody>
+              <tbody>              
+                  <tr id="internet"></tr>
+              </tbody>    
+          </table>
+          <h1>Telefonia</h1>
+          <table class="table table-bordered">
+              <tbody>
+              <tr></tr>
+              </tbody>
+              <tbody>              
+                  <tr id="telefonia"></tr>
+              </tbody>    
+          </table>
+  				
+  			   <div class="form-group">
+			    	<label>Precio Pronto Pago</label>
+			    	<input type="tex" class="form-control" id="precio_pronto"  placeholder="Pronto Pago" required>
+
+			  	</div>
+			  	<div class="form-group">
+			    	<label>Precio normal</label>
+			    	<input type="text" class="form-control" id="precio" placeholder="Precio Normal">
+			  	</div>
+			  	<button type="submit" id="registro" class="btn btn-default">Subir</button>
+		</div>	
+	</div>
+</div>
+<script type="text/javascript" src="js/paquetes.js"></script>
