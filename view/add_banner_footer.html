@@ -18,6 +18,13 @@
 			    	<input type="text" class="form-control" ng-model="descripcion" placeholder="(Opcional)">
 			  	</div>
 			  	<div class="form-group">
+			    	<label>Tipo</label>
+ 			    	<select class="form-control" ng-model="tipo" required>
+  						<option value="imagen">Imagen</option>
+  						<option value="video">Video</option>
+  					</select>
+			  	</div>
+			  	<div class="form-group">
 			    	<label>Subir Archivo</label>
 			    	<input type="file"  uploader-Model="file" ng-model="file" required>
 			  	</div>
