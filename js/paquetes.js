@@ -97,4 +97,31 @@ $( document ).ready(function() {
        
     });
 
+
+    $("#actualizar").click(function(){
+        var tipo = $("#tipo").val();
+        var television = $(".rbtelevision:checked").val();
+        var internet = $(".rbinternet:checked").val();
+        var telefonia = $(".rbtelefonia:checked").val();
+        var precio = $("#precio").val();
+        var precio_pronto = $("#precio_pronto").val();
+
+        var datos = {'precio' :  precio, 'precio_pronto' :  precio_pronto, 'tipo' :  tipo, 'id_television' :  television, 'id_telefonia' : telefonia  , 'id_internet' : internet};
+
+        console.log(datos);
+        $.ajax({
+            url: "http://localhost/api_megacable/agregarpaquete",
+            type: 'post',
+            data: JSON.stringify(datos),
+            dataType: 'json'
+        }).done(function () {
+            alert("datos agregados correctamente");
+            //window.location.href="#/paquetes";
+        }).fail(function () {
+            alert("datos agregados correctamente");
+            window.location.href="#/paquetes";
+        })
+       
+    });
+
 });
